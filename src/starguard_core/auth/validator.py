@@ -12,12 +12,13 @@ UPGRADE_URL = "https://reichert-science-intelligence.github.io/starguard-core/up
 # In-memory usage store (per process; for demo/testing)
 _usage: dict[tuple[str | None, str], int] = {}
 
-# Feature -> tier mapping (PRO gets hedis_predictions, radv_calculator, hcc_scoring)
+# Feature -> tier mapping (PRO gets hedis_predictions, radv_calculator, hcc_scoring, stars_calculator)
 _FEATURE_TIERS: dict[str, set[Tier]] = {
     "hedis_summary": {Tier.FREE, Tier.PRO},  # Week 4: FREE summary, PRO predictions
     "hedis_predictions": {Tier.PRO},
     "radv_calculator": {Tier.PRO},  # Week 2: radv_calculator now Pro-tier
     "hcc_scoring": {Tier.PRO},      # Week 3: RAF calculator, gaps, revenue, compound view
+    "stars_calculator": {Tier.PRO},  # Week 5: QBP threshold, trajectory, command center
 }
 
 
