@@ -6,10 +6,11 @@ from starguard_core.radv.financial import compute_exposure
 
 def score_exposure(scenario: RadvScenario) -> RadvResult:
     """Compute RADV audit exposure from scenario parameters."""
-    stratify(scenario)  # stratify for risk segments
+    strata = stratify(scenario)
     exposure = compute_exposure(scenario)
     return RadvResult(
         estimated_exposure=exposure,
         confidence_interval=(exposure * 0.9, exposure * 1.1),
         scenario=scenario,
+        risk_tier=strata.get("risk_tier", "medium"),
     )

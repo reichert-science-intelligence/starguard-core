@@ -20,3 +20,4 @@ class RadvResult:
     estimated_exposure: float
     confidence_interval: tuple[float, float]
     scenario: RadvScenario
+    risk_tier: str = "medium"  # low | medium | high — for close-gate verification

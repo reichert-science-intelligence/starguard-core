@@ -26,18 +26,25 @@ def test_radv_scenario_default_extrapolation():
 def test_radv_result_creation():
     """RadvResult can be created with required fields."""
     s = RadvScenario(enrollee_count=1000, sample_size=200, error_rate=0.05)
-    r = RadvResult(estimated_exposure=50_000.0, confidence_interval=(45_000, 55_000), scenario=s)
+    r = RadvResult(
+        estimated_exposure=50_000.0,
+        confidence_interval=(45_000, 55_000),
+        scenario=s,
+        risk_tier="medium",
+    )
     assert r.estimated_exposure == 50_000.0
     assert r.confidence_interval == (45_000, 55_000)
+    assert r.risk_tier == "medium"
 
 
 # --- stratifier ---
 def test_stratify_returns_dict():
-    """stratify returns a dict with segments."""
+    """stratify returns a dict with segments and risk_tier."""
     s = RadvScenario(enrollee_count=1000, sample_size=200, error_rate=0.05)
     out = stratify(s)
     assert isinstance(out, dict)
     assert "segments" in out
+    assert "risk_tier" in out
 
 
 def test_stratify_includes_scenario():
@@ -105,6 +112,14 @@ def test_score_exposure_links_scenario():
     s = RadvScenario(enrollee_count=500, sample_size=100, error_rate=0.08)
     r = score_exposure(s)
     assert r.scenario is s
+
+
+def test_score_exposure_has_risk_tier():
+    """score_exposure result has risk_tier for close-gate verification."""
+    s = RadvScenario(enrollee_count=1000, sample_size=200, error_rate=0.05)
+    r = score_exposure(s)
+    assert hasattr(r, "risk_tier")
+    assert r.risk_tier in ("low", "medium", "high")
 
 
 # --- integration ---
