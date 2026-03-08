@@ -14,6 +14,7 @@ _usage: dict[tuple[str | None, str], int] = {}
 
 # Feature -> tier mapping (PRO gets hedis_predictions, radv_calculator, hcc_scoring)
 _FEATURE_TIERS: dict[str, set[Tier]] = {
+    "hedis_summary": {Tier.FREE, Tier.PRO},  # Week 4: FREE summary, PRO predictions
     "hedis_predictions": {Tier.PRO},
     "radv_calculator": {Tier.PRO},  # Week 2: radv_calculator now Pro-tier
     "hcc_scoring": {Tier.PRO},      # Week 3: RAF calculator, gaps, revenue, compound view
