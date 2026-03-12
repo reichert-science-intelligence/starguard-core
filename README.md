@@ -1,5 +1,7 @@
 # starguard-core
 
+[![CI](https://github.com/reichert-science-intelligence/starguard-core/actions/workflows/ci.yml/badge.svg)](https://github.com/reichert-science-intelligence/starguard-core/actions/workflows/ci.yml)
+
 Shared library for StarGuard Desktop, Mobile, and AuditShield.
 
 ## Install
