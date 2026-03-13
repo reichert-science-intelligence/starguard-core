@@ -164,3 +164,25 @@ def test_radv_financial_export():
     """financial module exports compute_exposure."""
     from starguard_core.radv import financial
     assert hasattr(financial, "compute_exposure")
+
+
+# --- coverage gap fill: stratifier low tier (line 10) ---
+def test_stratify_low_error_rate_returns_low_tier():
+    """stratify returns 'low' risk_tier for error_rate < 0.03."""
+    s = RadvScenario(enrollee_count=1000, sample_size=200, error_rate=0.01)
+    out = stratify(s)
+    assert out["risk_tier"] == "low"
+
+
+def test_stratify_medium_error_rate_returns_medium_tier():
+    """stratify returns 'medium' risk_tier for 0.03 <= error_rate < 0.08."""
+    s = RadvScenario(enrollee_count=1000, sample_size=200, error_rate=0.05)
+    out = stratify(s)
+    assert out["risk_tier"] == "medium"
+
+
+def test_stratify_high_error_rate_returns_high_tier():
+    """stratify returns 'high' risk_tier for error_rate >= 0.08."""
+    s = RadvScenario(enrollee_count=1000, sample_size=200, error_rate=0.10)
+    out = stratify(s)
+    assert out["risk_tier"] == "high"

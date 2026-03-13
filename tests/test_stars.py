@@ -170,3 +170,44 @@ def test_stars_module_importable():
     assert callable(compute_bonus_threshold_impact)
     assert callable(project_stars)
     assert callable(percentile_to_stars)
+
+
+# --- coverage gap fill: _bonus_pct_at_stars (lines 17-21) ---
+def test_bonus_pct_at_stars_below_3():
+    """_bonus_pct_at_stars returns 0.0 for stars < 3.0."""
+    from starguard_core.stars.impact import _bonus_pct_at_stars
+    assert _bonus_pct_at_stars(2.5) == 0.0
+
+
+def test_bonus_pct_at_stars_between_3_and_4():
+    """_bonus_pct_at_stars returns QBP_BONUS_AT_3_5_PCT for 3.0 <= stars < 4.0."""
+    from starguard_core.stars.impact import _bonus_pct_at_stars, QBP_BONUS_AT_3_5_PCT
+    assert _bonus_pct_at_stars(3.5) == QBP_BONUS_AT_3_5_PCT
+
+
+def test_bonus_pct_at_stars_at_or_above_4():
+    """_bonus_pct_at_stars returns QBP_BONUS_AT_4_0_PCT for stars >= 4.0."""
+    from starguard_core.stars.impact import _bonus_pct_at_stars, QBP_BONUS_AT_4_0_PCT
+    assert _bonus_pct_at_stars(4.5) == QBP_BONUS_AT_4_0_PCT
+
+
+# --- coverage gap fill: inner _bonus_pct branches (lines 44, 48) ---
+def test_compute_bonus_impact_baseline_4_2_hits_qbp_bracket():
+    """Baseline 4.2 stars exercises _bonus_pct 4.0<=s<4.5 branch."""
+    p = PlanProfile("P_4_2", 4.2, 10_000, PlanRiskProfile.LOW)
+    out = compute_bonus_threshold_impact(p)
+    assert out["baseline_stars"] == 4.2
+    assert isinstance(out["incremental_revenue_m"], float)
+
+
+def test_compute_bonus_impact_baseline_5_hits_max_bracket():
+    """Baseline 5.0 stars exercises _bonus_pct return 0.05 branch."""
+    p = PlanProfile("P_5_0", 5.0, 10_000, PlanRiskProfile.LOW)
+    out = compute_bonus_threshold_impact(p)
+    assert out["baseline_stars"] == 5.0
+
+
+# --- coverage gap fill: stars_to_percentile unknown value (cutpoints line 20) ---
+def test_stars_to_percentile_unknown_returns_default():
+    """stars_to_percentile for a value not in the map returns 85.0."""
+    assert stars_to_percentile(3.0) == 85.0

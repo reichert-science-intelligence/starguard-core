@@ -223,3 +223,28 @@ def test_hcc_module_importable():
     assert callable(compute_revenue_opportunity)
     assert callable(default_hcc_scenario)
     assert callable(run_compound_analysis)
+
+
+# --- coverage gap fill: _age_bucket branches (lines 44, 46, 59) ---
+def test_compute_raf_score_age_under_35():
+    """compute_raf_score for age < 35 exercises '0-34' age bucket (line 44)."""
+    p = HCCProfile(member_id="M_young", age=28, gender="M", hcc_codes=[])
+    r = compute_raf_score(p)
+    assert r.profile_id == "M_young"
+    assert r.raf_score > 0
+
+
+def test_compute_raf_score_age_35_to_44():
+    """compute_raf_score for age 35-44 exercises '35-44' age bucket (line 46)."""
+    p = HCCProfile(member_id="M_mid", age=40, gender="F", hcc_codes=[])
+    r = compute_raf_score(p)
+    assert r.profile_id == "M_mid"
+    assert r.raf_score > 0
+
+
+def test_compute_raf_score_age_80_plus():
+    """compute_raf_score for age >= 80 exercises '80+' age bucket (line 59)."""
+    p = HCCProfile(member_id="M_old", age=82, gender="M", hcc_codes=["HCC001"])
+    r = compute_raf_score(p)
+    assert r.profile_id == "M_old"
+    assert r.raf_score > 0
