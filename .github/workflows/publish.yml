@@ -1,5 +1,5 @@
 # Publish to PyPI on tag push (Phase 4 D1)
-# Trigger: v4.*.* only. TestPyPI dry-run gate before live publish.
+# Trigger: v4.*.* only. Publish direct to PyPI.
 name: Publish
 on:
   push:
@@ -17,11 +17,6 @@ jobs:
         run: pip install build twine
       - name: Build
         run: python -m build
-      - name: Publish to TestPyPI (gate)
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        run: twine upload --repository-url https://test.pypi.org/legacy/ dist/*
       - name: Publish to PyPI
         env:
           TWINE_USERNAME: __token__
